@@ -1,6 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/sign-in.dto';
+import { RecoverPasswordDto } from './dto/recover-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -12,5 +13,12 @@ export class AuthController {
   ) {
     return await this.authService.signIn(signInDto);
   };
+
+  @Post('/recoverPassword')
+  async recoverPassword (
+    @Body() recoverPasswordDto: RecoverPasswordDto
+  ) {
+    return await this.authService.recoverPassword(recoverPasswordDto);
+  }
   
 }

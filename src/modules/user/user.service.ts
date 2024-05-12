@@ -2,7 +2,6 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'bcrypt';
-import { UserResponse } from 'src/types/user.type';
 
 @Injectable()
 export class UserService {
@@ -10,7 +9,7 @@ export class UserService {
 
   async createUser(
     createUserDto: CreateUserDto
-  ): Promise<void> {
+  ): Promise<Boolean> {
     const { username, email, password } = createUserDto;
 
     const user = await this.prismaService.user.findUnique({
@@ -33,5 +32,8 @@ export class UserService {
     });
 
     console.log("User created: ", {createdUser})
+
+    return !!createdUser;
   }
+
 }
