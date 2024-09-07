@@ -34,7 +34,8 @@ export class AuthService {
     console.log("User logged: ", user)
 
     return {
-      username: user.username
+      username: user.username,
+      email: user.email
     }
   }
 

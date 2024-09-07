@@ -7,9 +7,64 @@ datasource db {
   url = env("DATABASE_URL")
 }
 
-model User {
+model User { // Usuário
   id Int @id @default(autoincrement())
   username String
   email String @unique
   hashedPassword String
+  imageUrl String?
+  goals Goal[]
+  accounts Account[]
+}
+
+model Goal { // Metas
+  id Int @id @default(autoincrement())
+  title String
+  description String?
+  term String?
+  currentValue Decimal
+  finalValue Decimal
+  isComplete Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+}
+
+model Account { // Contas
+  id Int @id @default(autoincrement())
+  title String
+  description String?
+  totalValue Decimal
+  isPaid Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  financialInstitutionId Int?
+  financialInstitution FinancialInstitution? @relation(fields: [financialInstitutionId], references: [id])
+  categoryId Int?
+  category Category? @relation(fields: [categoryId], references: [id])
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  
+  @@index([userId, categoryId, financialInstitutionId])
+}
+
+model FinancialInstitution { // Instituição financeira
+  id Int @id @default(autoincrement())
+  name String
+  imageUrl String?
+  accounts Account[]
+}
+
+model Category { // Categoria
+  id Int @id @default(autoincrement())
+  name String
+  accounts Account[]
+}
+
+model Preference {
+  id Int @id @default(autoincrement())
+  theme String @unique @default("light")
 }
